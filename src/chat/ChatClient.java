@@ -46,8 +46,11 @@ public class ChatClient extends Thread{
                     //Ejemplo: msg-juan-hola como estas
                     String user = data[1];
                     String message = data[2];
-                    String clientIp = clients.get(user).getIp();
-                    if(clientIp != null){
+                    Value clientValue = clients.get(user);
+                    String clientIp = "";
+                    
+                    if(clientValue!= null){
+                        clientIp = clientValue.getIp();
                         sendMessage(succesor,"msg-"+clientIp+"-"+name+"-"+message);
                     }
                     else{
@@ -74,7 +77,7 @@ public class ChatClient extends Thread{
 
             }
             catch (Exception e) {
-                System.out.println("Error sending datagram " + e);
+                //System.out.println("Error sending datagram " + e);
             }
         }
     }
