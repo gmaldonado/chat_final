@@ -33,6 +33,12 @@ public class Value {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Value{" + "ip=" + ip + ", id=" + id + '}';
+    }
+    
     
     
     

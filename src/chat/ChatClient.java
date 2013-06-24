@@ -48,7 +48,7 @@ public class ChatClient extends Thread{
                     String message = data[2];
                     String clientIp = clients.get(user).getIp();
                     if(clientIp != null){
-                        sendMessage(succesor,"msg-"+clientIp+"-"+user+"-"+message);
+                        sendMessage(succesor,"msg-"+clientIp+"-"+name+"-"+message);
                     }
                     else{
                         System.out.println("No connected user with that username");
@@ -132,7 +132,8 @@ public class ChatClient extends Thread{
         try {
             String user="someone";
             for (Map.Entry entry : clients.entrySet()) {
-                if(entry.getValue().equals(ip)){
+
+                if(((Value)entry.getValue()).getIp().equals(ip)){
                     user = entry.getKey().toString();
                 }
             } 
@@ -142,14 +143,14 @@ public class ChatClient extends Thread{
             DatagramPacket out = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(ip), port);
             socket.send(out);
             
-            socket.setSoTimeout(timeout);
-            out = new DatagramPacket (buffer, buffer.length);
-            socket.receive(out);
-            String received = new String(out.getData(), 0, out.getLength());
-            
-            if(received.equals("1")){
-                System.out.println("Message received");
-            }
+//            socket.setSoTimeout(timeout);
+//            out = new DatagramPacket (buffer, buffer.length);
+//            socket.receive(out);
+//            String received = new String(out.getData(), 0, out.getLength());
+//            
+//            if(received.equals("1")){
+//                System.out.println("Message received");
+//            }
         } 
         catch(Exception ex){
             System.out.println(ex.getMessage());
@@ -183,7 +184,7 @@ public class ChatClient extends Thread{
     }
     
     public String getBroadcast(){
-        return "192.168.2.0";
+        return "172.17.63.255";
     }
     
     public void sendMessage2(String ip, String message){

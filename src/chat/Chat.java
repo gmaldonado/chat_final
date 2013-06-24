@@ -7,7 +7,7 @@ public class Chat extends Thread {
     private static final int TIMEOUT = 5000;
     private static final int PORT = 10000;
     private static final String NAME = "gonzalo";
-    private static final String IP = "192.168.2.13";
+    private static final String IP = "172.17.50.250";
     
     public Chat(String args[]) throws Exception{
         server = new ChatServer(PORT,TIMEOUT,NAME,IP);
