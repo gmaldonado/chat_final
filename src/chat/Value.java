@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package chat;
 
 /**
- *
- * @author gmaldonado
+ * This class represents a node without the username
+ * @author Jaime Campano, Roberto Garcia, Gonzalo Maldonado
  */
 public class Value {
     

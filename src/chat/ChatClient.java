@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package chat;
 
 import java.net.DatagramPacket;
@@ -11,6 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * This class represents a chat client
+ * @author Jaime Campano, Roberto Garcia, Gonzalo Maldonado
+ */
 public class ChatClient extends Thread{
     private final static Scanner scanner = new Scanner(System.in);
     private int port;
@@ -20,7 +21,6 @@ public class ChatClient extends Thread{
     private boolean connected;
     private String predecessor;
     public static String succesor;
-    //username, <ip, id>
     public static LinkedHashMap<String,Value> clients;
     public static int id;
     
@@ -34,16 +34,23 @@ public class ChatClient extends Thread{
         id = 1;
         start();
     }
-       
+    /**
+     * Excecution of this thread.
+     */   
     public void run(){
-      doBroadcast("bcst-in");
-      updateSuccesor();
+      doBroadcast("bcst-in"); //When an user runs for the first time then connects
+      updateSuccesor(); //Asign a succesor to this node and notifies them all to update their id's
       while(true){
             try {
                 String line = scanner.nextLine();
+                
+                /**
+                 * To send a message the user should write:
+                 * msg-username-message
+                 * Example: msg-juan-hello
+                 */
                 if(line.startsWith("msg") && connected){
                     String data[] = line.split("-");
-                    //Ejemplo: msg-juan-hola como estas
                     String user = data[1];
                     String message = data[2];
                     Value clientValue = clients.get(user);
@@ -57,31 +64,38 @@ public class ChatClient extends Thread{
                         System.out.println("No connected user with that username");
                     }
                 }
+                
+                //This is just for debugging, if you want to know your succesor IP.
                 else if(line.equals("suc")){
                     System.out.println("your suc is "+succesor);
                 }
-                else if(line.equals("connected") && connected){ //lista todos los usuarios conectados
+                
+                //List all the connected users by username
+                else if(line.equals("connected") && connected){
                     getConnectedUsers();
                 }
 
+                //Disconnects the user and sends a message to everyone
                 else if(line.equals("disconnect") && connected){
                     doBroadcast("bcst-out");
                     System.exit(1);
                 }
-                else if(!connected){
-                    System.out.println("Please connect");
-                }
+                
                 else{
                     System.out.println("No such option");
                 }
 
             }
             catch (Exception e) {
-                //System.out.println("Error sending datagram " + e);
             }
         }
     }
     
+    /**
+     * It updates the succesor of a node in function of the nodes in the 
+     * system. Takes the first node (minimum id) and then update the 
+     * ip of the succesor.
+     */
     private void updateSuccesor(){
         int minId = Integer.MAX_VALUE;
         int maxId = Integer.MIN_VALUE;
@@ -121,21 +135,28 @@ public class ChatClient extends Thread{
         
     }
     
+    /**
+     * Get all connected users by username.
+     */
     public void getConnectedUsers(){
         if(clients.isEmpty()){
             System.out.println("No connected users");
             return;
         }
         for (Map.Entry entry : clients.entrySet()) {
-            System.out.println(entry.getKey()+"-"+((Value)entry.getValue()).getId());
+            System.out.println(entry.getKey());
         }   
     }
   
+    /**
+     * Sends a message to the given ip.
+     * @param ip ip to send the message
+     * @param message the message to send
+     */
     public void sendMessage(String ip, String message){
         try {
             String user="someone";
             for (Map.Entry entry : clients.entrySet()) {
-
                 if(((Value)entry.getValue()).getIp().equals(ip)){
                     user = entry.getKey().toString();
                 }
@@ -146,14 +167,6 @@ public class ChatClient extends Thread{
             DatagramPacket out = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(ip), port);
             socket.send(out);
             
-//            socket.setSoTimeout(timeout);
-//            out = new DatagramPacket (buffer, buffer.length);
-//            socket.receive(out);
-//            String received = new String(out.getData(), 0, out.getLength());
-//            
-//            if(received.equals("1")){
-//                System.out.println("Message received");
-//            }
         } 
         catch(Exception ex){
             System.out.println(ex.getMessage());
@@ -175,7 +188,7 @@ public class ChatClient extends Thread{
                 connected = true;//esto es solo porque comente lo de abajo
                 System.out.println("Connecting, please wait...");
                 Thread.sleep(timeout);
-                sendMessage2(getBroadcast(), "id-"+name+"-"+ip+"-"+id);
+                Utilities.sendMessage(getBroadcast(), "id-"+name+"-"+ip+"-"+id,port);
                 System.out.println("Welcome");
 
             }
@@ -187,23 +200,10 @@ public class ChatClient extends Thread{
     }
     
     public String getBroadcast(){
-        return "172.17.63.255";
+        return "192.168.1.0";
     }
     
-    public void sendMessage2(String ip, String message){
-        try {
-            
-            byte[] buffer = message.getBytes();
-            DatagramSocket socket = new DatagramSocket();
-            DatagramPacket out = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(ip), port);
-            socket.send(out);
 
-        } 
-        catch(Exception ex){
-            System.out.println(ex.getMessage());
-        }
-        
-    }
   
 }
 
