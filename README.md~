@@ -65,8 +65,7 @@ Nos indica el nick de todos los usuarios conectados (exceptuando el mismo desde 
 
 Se desconecta del sistema y le avisa a todos los nodos, para que actualicen registro de sucesor. 
 
-Otro punto importante para el DEBUG (esto solamente 
-es para que la revisión sea más fácil), es que cuando se manda un mensaje entre dos nodos y no están directamente
+Otro punto importante para el debug, es que cuando se manda un mensaje entre dos nodos y no están directamente
 conectados aparecerá un mensaje de debug en el(los) nodos intermedios que dirá que un mensaje 
 se está enviando a través de ese nodo:
 

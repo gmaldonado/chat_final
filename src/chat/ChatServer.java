@@ -5,6 +5,7 @@ package chat;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.Inet4Address;
 import java.net.SocketException;
 import java.util.LinkedHashMap;
 
@@ -136,6 +137,7 @@ public class ChatServer extends Thread{
                       else{
                           System.out.println("Sending message through this node to "+rcvdIp);
                           Utilities.sendMessage(succesor,"msg-"+rcvdIp+"-"+rcvdUser+"-"+rcvdMsg,port);
+                          
                       }
 
                   }
