@@ -1,5 +1,6 @@
-
 package chat;
+
+
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -133,6 +134,7 @@ public class ChatServer extends Thread{
                          System.out.println(rcvdUser + " says: "+rcvdMsg); 
                       }
                       else{
+                          System.out.println("Sending message through this node to "+rcvdIp);
                           Utilities.sendMessage(succesor,"msg-"+rcvdIp+"-"+rcvdUser+"-"+rcvdMsg,port);
                       }
 

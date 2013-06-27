@@ -1,5 +1,6 @@
-
 package chat;
+
+
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -23,14 +24,16 @@ public class ChatClient extends Thread{
     public static String succesor;
     public static LinkedHashMap<String,Value> clients;
     public static int id;
+    private String broadcast;
     
-    public ChatClient(int port, int timeout,String name,String ip){
+    public ChatClient(int port, int timeout,String name,String ip,String broadcast){
         this.port = port;
         this.timeout = timeout;
         this.name = name;
         this.ip = ip;
         this.connected = false;
         clients = new LinkedHashMap<String, Value>();
+        this.broadcast=broadcast;
         id = 1;
         start();
     }
@@ -188,6 +191,7 @@ public class ChatClient extends Thread{
                 connected = true;//esto es solo porque comente lo de abajo
                 System.out.println("Connecting, please wait...");
                 Thread.sleep(timeout);
+                
                 Utilities.sendMessage(getBroadcast(), "id-"+name+"-"+ip+"-"+id,port);
                 System.out.println("Welcome");
 
@@ -200,7 +204,7 @@ public class ChatClient extends Thread{
     }
     
     public String getBroadcast(){
-        return "192.168.1.0";
+        return broadcast;
     }
     
 

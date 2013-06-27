@@ -1,5 +1,6 @@
-
 package chat;
+
+
 
 /**
  * This class represents a node without the username
